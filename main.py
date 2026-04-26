@@ -1,11 +1,19 @@
 from fastapi import FastAPI, HTTPException, Form
-from llm_ollama import call_ollama
+from agent import ChatAgent
 
 app = FastAPI()
 
-@app.post("/chat/")
-async def chat(query: str = Form(...)):
-    # Here you would typically process the message and generate a response
-    # For demonstration purposes, we'll just echo the message back
-    #response = f"You said: {query}"
-    return {"answer": call_ollama(query)}
+chat_agent = ChatAgent()
+
+@app.post("/chat")
+async def chat(
+    query: str = Form(...)
+):
+    if not query.strip():
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
+
+    result = await chat_agent.run(query)
+
+    return {
+        "answer": result
+    }
