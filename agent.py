@@ -25,9 +25,16 @@ class ChatAgent:
             }
             for tool in tools_response.tools
         ]
+
+        print("agent.py -> Available tools for LLM: ", tools)
+
         custom_prompt = get_prompt(query)
 
+        print("agent.py -> Custom prompt for LLM: ", custom_prompt)
+
         llm_response = call_ollama(custom_prompt, tools)
+
+        print("agent.py -> LLM response: ", llm_response)
 
         if self.needs_tool_execution(llm_response):
             tool_call = llm_response.tool_calls[0]
@@ -40,8 +47,15 @@ class ChatAgent:
                 arguments = tool_call["args"]
             )
 
+            print("agent.py -> Tool execution result: ", tool_result)
+
             final_prompt = get_prompt(query, tool_result)
+
+            print("agent.py -> Final prompt for LLM after tool execution: ", final_prompt)
+
             final_response = call_ollama(final_prompt, tools)
+
+            print("agent.py -> Final LLM response after tool execution: ", final_response)
 
             final_answer = final_response.content
         else:

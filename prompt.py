@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 def get_prompt(query: str, tool_result: Optional[Any] = None) -> str:
 
     prompt = f"""
-    You are an AI assistant that helps users with their queries. Your task is answer the user's query using the information provided
+    You are an AI assistant that helps users with their queries. Your task is answer the user's query using the information provided.
     
     ## User Query: {query}
     

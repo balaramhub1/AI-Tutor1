@@ -41,7 +41,6 @@ async def list_mcp_tools():
         async with ClientSession(*streams) as session:
             # Initialize the session handshake with the server
             await session.initialize()
-
             # Request the list of available tools from the MCP server
             tools = await session.list_tools()
             print("MCP-Client : Available tools - ", tools)
