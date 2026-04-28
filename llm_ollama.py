@@ -43,12 +43,12 @@ def call_ollama(input: str,
         - Without tools: Returns a standard chat completion response
 
     Examples:
-        >>> # Simple text generation
-        >>> response = call_ollama("What is the capital of France?")
+        # Simple text generation
+        response = call_ollama("What is the capital of France?")
 
-        >>> # With tools enabled
-        >>> tools = [{"type": "function", "function": {...}}]
-        >>> response = call_ollama("Search for recent news", tools=tools)
+        # With tools enabled
+        tools = [{"type": "function", "function": {...}}]
+        response = call_ollama("Search for recent news", tools=tools)
     """
     if tools:
         # Bind the provided tools to the LLM and invoke with the input
