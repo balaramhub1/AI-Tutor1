@@ -1,11 +1,13 @@
 from typing import Any, Dict, List, Optional
 
-def get_prompt(query: str, tool_result: Optional[Any] = None) -> str:
+def get_prompt(query: str, pdf_path: str = None, tool_result: Optional[Any] = None) -> str:
 
     prompt = f"""
     You are an AI assistant that helps users with their queries. Your task is answer the user's query using the information provided.
     
     ## User Query: {query}
+    
+    ## PDF Path: {pdf_path if pdf_path else "No PDF uploaded"}
     
     ## Tool Result: {tool_result if tool_result else "No tool result available"}
     

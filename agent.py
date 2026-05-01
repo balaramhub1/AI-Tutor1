@@ -8,7 +8,7 @@ class ChatAgent:
     def needs_tool_execution(self, llm_response: AIMessage) -> bool:
         return bool(llm_response.tool_calls)
 
-    async def run(self, query: str) -> str:
+    async def run(self, query: str, pdf_path: str) -> str:
         tools_response = await list_mcp_tools()
 
         tools = [
@@ -28,7 +28,7 @@ class ChatAgent:
 
         print("agent.py -> Available tools for LLM: ", tools)
 
-        custom_prompt = get_prompt(query)
+        custom_prompt = get_prompt(query, pdf_path)
 
         print("agent.py -> Custom prompt for LLM: ", custom_prompt)
 
@@ -49,7 +49,7 @@ class ChatAgent:
 
             print("agent.py -> Tool execution result: ", tool_result)
 
-            final_prompt = get_prompt(query, tool_result)
+            final_prompt = get_prompt(query, pdf_path, tool_result)
 
             print("agent.py -> Final prompt for LLM after tool execution: ", final_prompt)
 

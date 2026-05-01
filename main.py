@@ -4,11 +4,15 @@ AI Tutor FastAPI Application
 This module defines the main FastAPI application for the AI Tutor service.
 It provides a REST API endpoint for handling chat queries and generating responses.
 """
-
+import os
 from fastapi import FastAPI, HTTPException, Form
-
 from agent import ChatAgent
 from llm_ollama import call_ollama
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_DIR = os.path.join(BASE_DIR, "..", "uploaded_pdfs")
+
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Initialize the FastAPI application instance
 app = FastAPI()
@@ -17,7 +21,9 @@ chat_agent = ChatAgent()
 
 
 @app.post("/chat")
-async def chat(query: str = Form(...)):
+async def chat(query: str = Form(...),
+               file: UploadFile | None = File(None)
+               ):
     """
     Handle chat queries and return AI-generated responses.
 
@@ -51,6 +57,20 @@ async def chat(query: str = Form(...)):
     # Validate that the query is not empty
     if not query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
+
+    pdf_path = None
+
+    if file:
+        if file.content_type != "application/pdf":
+            raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+
+        pdf_path = os.path.join(UPLOAD_DIR, file.filename)
+
+        with open(pdf_path, "wb") as f:
+            f.write(await file.read())
+
+    result = await chat_agent.run(query, pdf_path)
+
 
     # Invoke the Ollama LLM with the user's query and return the response
     # The call_ollama function handles the communication with the local Ollama server
