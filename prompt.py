@@ -20,6 +20,5 @@ def get_prompt(query: str, pdf_path: str = None, tool_result: Optional[Any] = No
     2. If tool result is NOT available:
      - Answer based on your general knowledge and understanding of the user's query.
      - Be clear that you're answering without specific document context.
-     
     """
     return prompt
